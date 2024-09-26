@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图标生成器</title>
+</head>
+<body class="m-4">
+<div class="max-w-screen-lg ml-auto mr-auto">
+    <p class="text-center text-2xl">
+        App 图标生成器
+    </p>
+    <div role="alert" class="alert mt-2">
+        <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="stroke-info h-6 w-6 shrink-0">
+            <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+            <h3 class="font-bold">请注意</h3>
+            <div class="text-xs">本工具仅用作学习交流严禁用于任何非法使用，导致的任何财产、利益损失与作者无关。</div>
+            <div class="text-xs mt-2">
+                <b>使用帮助</b>：<br>
+                1、点击【加载预设元素】使用内置的简单图标配置方案。<br>
+                2、点击【主体前景图片】将会在右侧出现对图片的调整界面。<br>
+                3、点击【图片】一栏的文件选择区域，选择一张合适的图片文件作为图标的主体内容。<br>
+                4、如果对效果不满意，可以新增或对其它元素进行微调。<br>
+                5、点击【下载到本地】输入图片大小，点击【确定】即可保存到本地。
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row mt-4 gap-2">
+
+        <div id="canvas-wrap" class="w-full md:w-1/2 border aspect-square border-violet-800 border-solid rounded-2xl overflow-hidden"></div>
+
+        <!-- 图层和图层编辑 区域 -->
+        <div class="flex flex-col w-full md:w-1/2 border aspect-square border-solid border-violet-800 rounded-2xl overflow-hidden">
+            <div class="flex flex-row grow border-b border-base-300 overflow-hidden">
+                <div class="w-1/2 flex flex-col">
+                    <label class="block text-sm font-bold leading-6 text-gray-500 text-center bg-base-200 py-2">元素</label>
+                    <div class="grow flex flex-col overflow-auto">
+                        <ul class="menu bg-base-100 w-full h-full hidden flex-nowrap" id="spriteWrap"></ul>
+                        <div class="w-full text-center px-2" id="spriteEmpty">
+                            <svg class="mx-auto mt-4" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
+                                <path d="M106.97251697 619.07623114h289.80414734c11.63872078 0 21.53163343 9.89291266 21.53163343 21.53163345 0 51.21037142 40.73552271 91.3639581 92.52783018 91.3639581s92.52783017-40.15358668 92.52783018-91.3639581c0-11.63872078 9.89291266-21.53163343 21.53163344-21.53163345h288.05833923c8.72904058 0 16.29420908 5.23742435 19.78582532 12.80259287-4.65548831-15.71227305-12.80259285-32.00648214-13.96646493-34.3342263 0-0.58193603-0.58193603-0.58193603-0.58193604-0.58193603l-92.52783018-146.6478818c0-0.58193603-0.58193603-0.58193603-0.58193605-1.16387207-1.74580811-1.74580811-15.71227305-19.78582532-32.00648212-29.09680195-16.87614513-9.89291266-40.15358668-11.63872078-43.06326688-11.63872078h-494.64563303c-4.07355227 0-23.8593776 0.58193603-39.57165064 9.89291266-15.71227305 9.89291266-27.35099383 26.76905779-28.5148659 28.51486591 0 0-0.58193603 0.58193603-0.58193603 1.16387208l-77.97942921 138.50077725c-2.32774415 3.49161624-9.89291266 16.87614513-16.29420909 37.82584251 4.07355227-2.9096802 8.72904058-5.23742435 14.54840098-5.23742435z" fill="#d9d9d9" p-id="8418"></path>
+                                <path d="M937.3952444 670.28660257c0-1.74580811-1.16387208-16.87614513-4.07355228-31.4245461v2.32774415c0 11.63872078-9.31097662 21.53163343-21.53163344 21.53163343h-267.69057785l-2.90968021 11.05678476c-15.13033701 59.93941199-69.25038862 101.25687076-130.93560873 101.25687075-62.26715616 0-116.38720777-41.8993948-131.51754478-101.25687075l-2.9096802-11.05678476H106.39058092c-8.72904058 0-15.71227305-5.23742435-19.20388928-12.22065681-1.16387208 10.4748487-1.16387208 18.62195325-1.16387208 22.11356949v157.12273048c0 2.9096802 1.74580811 26.76905779 18.62195325 42.48133083 16.87614513 15.71227305 43.64520291 16.87614513 46.5548831 16.87614514h1.16387208-0.58193603 715.78132778c5.23742435 0 31.4245461-0.58193603 49.46456329-16.87614514 18.0400172-16.29420908 19.20388928-38.40777856 19.2038893-44.80907498l1.16387207-157.12273049zM509.0903198 348.47597308c-16.29420908 0-29.67873798-13.3845289-29.67873798-29.67873798V148.87191176c0-16.29420908 13.3845289-29.67873798 29.67873798-29.67873798s29.67873798 13.3845289 29.67873799 29.67873798v170.50725939c0 16.29420908-13.3845289 29.09680195-29.67873799 29.09680193z m198.44018926-1.16387207c-16.29420908 0-29.67873798-13.3845289-29.67873798-29.67873799 0-6.98323246 2.32774415-13.3845289 6.40129642-18.62195323l67.5045805-83.21685357c5.81936038-6.98323246 13.96646493-11.05678473 23.27744156-11.05678473 6.98323246 0 13.3845289 2.32774415 18.62195324 6.40129643 6.40129643 4.65548831 9.89291266 12.22065682 11.05678474 19.78582531 0.58193603 7.56516851-1.74580811 15.71227305-6.40129642 21.53163344l-67.50458051 83.21685356c-5.81936038 8.14710455-13.96646493 12.22065682-23.27744155 11.63872078z m-393.38876226-1.74580812c-8.72904058 0-17.45808117-4.07355227-23.27744156-11.05678474l-66.34070843-83.7987896c-9.89291266-12.80259285-8.14710455-31.4245461 4.65548831-41.89939479 5.23742435-4.07355227 11.63872078-6.40129643 18.62195325-6.40129643 9.31097662 0 17.45808117 4.07355227 23.27744155 11.05678474l66.34070843 83.79878959c9.89291266 12.80259285 8.14710455 31.4245461-4.65548831 41.8993948-5.23742435 4.07355227-12.22065682 6.40129643-18.62195324 6.40129643z" fill="#d9d9d9"></path>
+                            </svg>
+                            <div class="text-neutral">没有元素</div>
+                            <label role="button" for="create_layer_modal" class="btn btn-primary btn-sm btn-block mt-6">新增元素</label>
+                            <button id="loadDefaultSprite" class="btn btn-accent btn-sm btn-block mt-2">加载预设元素</button>
+                            <div class="text-xs bg-base-200 rounded-lg p-4 text-start mt-2">
+                                <b>加载预设元素</b>：可以快速使用内置配置，实现图标制作。
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="border-l border-base-300"></div>
+
+                <div class="w-1/2 flex flex-col">
+                    <label class="block text-sm font-bold leading-6 text-gray-500 text-center bg-base-200 py-2">调整</label>
+                    <div class="grow flex flex-col overflow-auto">
+
+                        <div class="w-full h-full p-2 hidden" id="rectSpriteOptionWrap">
+
+                            <div class="text-sm bg-base-200 rounded-lg p-2 flex flex-row gap-1 items-center">
+                                <label class="text-gray-500 font-bold">别名</label>
+                                <input type="text" class="sprite-nickname input input-xs grow rounded-md" />
+                            </div>
+                            <div class="flex flex-row gap-2 mt-2">
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">X</label>
+                                        <span class="sprite-x-v float-end">0.5</span>
+                                    </div>
+                                    <input type="range" min="0" max="1" step="0.01" class="sprite-x range range-xs mt-2" />
+                                </div>
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">Y</label>
+                                        <span class="sprite-y-v float-end">0.5</span>
+                                    </div>
+                                    <input type="range" min="0" max="1" step="0.01" class="sprite-y range range-xs mt-2" />
+                                </div>
+                            </div>
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">大小</label>
+                                    <span class="sprite-size-v float-end">0.5</span>
+                                </div>
+                                <input type="range" min="0" max="1" step="0.01" class="sprite-size range range-xs mt-2" />
+                            </div>
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">圆角</label>
+                                    <span class="sprite-radio-v float-end">0.5</span>
+                                </div>
+                                <input type="range" min="0" max="1" step="0.01" class="sprite-radio range range-xs mt-2" />
+                            </div>
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">颜色</label>
+                                    <span class="sprite-color-v float-end">0.5</span>
+                                </div>
+                                <input type="color" class="sprite-color block mt-1" />
+                            </div>
+                            <button class="sprite-del btn text-error btn-sm btn-block my-2">删除</button>
+                        </div>
+                        <div class="w-full h-full p-2 hidden" id="imgSpriteOptionWrap">
+
+                            <div class="text-sm bg-base-200 rounded-lg p-2 flex flex-row gap-1 items-center">
+                                <label class="text-gray-500 font-bold">别名</label>
+                                <input type="text" class="sprite-nickname input input-xs grow rounded-md" />
+                            </div>
+                            <div class="flex flex-row gap-2 mt-2">
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">X</label>
+                                        <span class="sprite-x-v float-end">0.5</span>
+                                    </div>
+                                    <input type="range" min="0" max="1" step="0.01" class="sprite-x range range-xs mt-2" />
+                                </div>
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">Y</label>
+                                        <span class="sprite-y-v float-end">0.5</span>
+                                    </div>
+                                    <input type="range" min="0" max="1" step="0.01" class="sprite-y range range-xs mt-2" />
+                                </div>
+                            </div>
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">大小</label>
+                                    <span class="sprite-size-v float-end">0.5</span>
+                                </div>
+                                <input type="range" min="0" max="1" step="0.01" class="sprite-size range range-xs mt-2" />
+                            </div>
+
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">图片</label>
+                                </div>
+                                <input id="imgfile-selector" type="file" class="sprite-img hidden" accept="image/*" />
+                                <label for="imgfile-selector" class="sprite-img-v block mt-1 file-input file-input-sm w-full px-2">
+                                    未选择文件
+                                </label>
+                            </div>
+                            <button class="sprite-del btn text-error btn-sm btn-block my-2">删除</button>
+                        </div>
+
+                        <div class="w-full px-2 mt-2" id="spriteOptionEmpty">
+                            <div class="text-xs bg-base-200 rounded-lg p-4">
+                                先选中元素，这里将显示调整选项
+                            </div>
+                            <div class="text-xs bg-base-200 rounded-lg p-4 mt-2">
+                                <b>导入元素配置</b>：可以将之前做好的元素配置文件导入，然后进行一些调整实现新内容的替换。<br><br>
+                                <b>导出元素配置</b>：将当前已经编辑好的元素配置导出到本地，后续可在其它设备中打开本工具导入使用。
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2 w-full p-2 border-b">
+                <label role="button" for="create_layer_modal" class="btn btn-primary btn-sm grow">新增元素</label>
+                <button id="importBtn" class="btn btn-sm grow">导入元素配置</button>
+                <button id="exportBtn" class="btn btn-sm grow">导出元素配置</button>
+            </div>
+
+            <div class="flex flex-row gap-2 w-full p-2">
+                <button id="btn-download" class="btn btn-success grow text-success-content">下载到本地</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-sm text-gray-500 mt-2">
+        作者：<a href="https://www.microanswer.cn/" target="_blank">Microanswer</a>
+    </div>
+</div>
+
+<!-- 新建元素弹出框 -->
+<input type="checkbox" id="create_layer_modal" class="modal-toggle" />
+<div class="modal" role="dialog">
+    <div class="modal-box w-auto">
+        <h3 class="text-lg font-bold">新增元素</h3>
+        <ul class="menu bg-base-200 w-56 mt-4 rounded-xl">
+            <li><label for="create_layer_modal" id="menu-item-rect">
+                    <svg id="rect-svg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="25" height="25">
+                        <path d="M832 853.333333h-149.845333a383.018667 383.018667 0 0 0 21.845333-128 384.256 384.256 0 0 0-512-362.154666V213.333333a85.333333 85.333333 0 0 1 85.333333-85.333333h554.666667a85.333333 85.333333 0 0 1 85.333333 85.333333v554.666667a85.333333 85.333333 0 0 1-85.333333 85.333333z" fill="#1296db"></path>
+                        <path d="M320 725.333333m-298.666667 0a298.666667 298.666667 0 1 0 597.333334 0 298.666667 298.666667 0 1 0-597.333334 0Z" fill="#1296db" p-id="11026"></path>
+                    </svg>
+                    <span>形状元素</span>
+                </label></li>
+            <li><label for="create_layer_modal" id="menu-item-img">
+                    <svg id="img-svg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="25" height="25"><path d="M136.533333 0h750.933334c75.093333 0 136.533333 61.44 136.533333 136.533333v750.933334c0 75.093333-61.44 136.533333-136.533333 136.533333H136.533333c-75.093333 0-136.533333-61.44-136.533333-136.533333V136.533333C0 61.44 61.44 0 136.533333 0z m580.266667 409.6c54.613333 0 102.4-47.786667 102.4-102.4S771.413333 204.8 716.8 204.8 614.4 252.586667 614.4 307.2 662.186667 409.6 716.8 409.6z m-273.066667 266.24l-68.266666-109.226667c0-6.826667-6.826667-6.826667-13.653334-13.653333-20.48-6.826667-40.96-6.826667-47.786666 13.653333l-177.493334 273.066667v13.653333c0 20.48 13.653333 34.133333 34.133334 34.133334h696.32c13.653333 0 27.306667-13.653333 27.306666-27.306667 0-6.826667 0-13.653333-6.826666-13.653333l-150.186667-211.626667c-6.826667-13.653333-27.306667-13.653333-40.96-6.826667l-6.826667 6.826667-13.653333 13.653333-95.573333 150.186667c-13.653333 13.653333-34.133333 20.48-47.786667 6.826667-6.826667 0-6.826667-6.826667-6.826667-13.653334L443.733333 675.84z" fill="#d4237a" p-id="12145"></path></svg>
+                    <span>图片元素</span>
+                </label></li>
+            <li class="hidden"><label for="create_layer_modal" id="menu-item-txt">
+                    <svg id="txt-svg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="25" height="25"><path d="M913.408 1024l-66.56 0q-29.696 0-51.2-5.12t-36.864-15.872-26.112-27.136-19.968-37.888q-15.36-38.912-28.16-70.656t-22.016-55.296q-11.264-26.624-20.48-49.152l-254.976 0q-7.168 23.552-17.408 51.2-8.192 23.552-21.504 56.832t-30.72 72.192q-20.48 46.08-47.104 63.488t-60.416 17.408l-70.656 0q-45.056 0-60.928-19.968t2.56-68.096q18.432-46.08 43.008-108.544t52.224-132.608 57.344-143.872 57.344-144.384q65.536-164.864 137.216-343.04 7.168-17.408 18.432-31.744 10.24-11.264 27.136-21.504t42.496-10.24q26.624 0 43.52 10.752t28.16 24.064q12.288 15.36 19.456 33.792 72.704 180.224 138.24 345.088 27.648 70.656 57.344 143.872t56.832 142.336 51.2 129.536 41.472 104.448q14.336 34.816 4.096 62.464t-43.008 27.648zM616.448 634.88l-97.28-347.136-1.024 0-108.544 347.136 206.848 0z" p-id="17481"></path></svg>
+                <span>文本元素</span>
+                </label></li>
+        </ul>
+        <div class="modal-action w-full mt-4">
+            <label for="create_layer_modal" class="btn btn-block">关闭</label>
+        </div>
+    </div>
+</div>
+
+<!-- alert 和 confirm -->
+<dialog id="ac_modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold ac_modal-title">提示信息</h3>
+        <p class="py-4 ac_modal-msg"></p>
+        <div class="modal-action">
+            <button class="btn btn-primary ac_modal-confirm">确定</button>
+            <form method="dialog">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn">关闭</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<!-- 元素条目模板 -->
+<li id="sprite-item-template" class="hidden"><a class="sprite-item"><span class="text overflow-ellipsis overflow-hidden text-nowrap"></span></a></li>
+
+<!-- 用来导入配置的 -->
+<input id="cfg-file-selector" class="hidden" type="file" accept="application/json"/>
+
+
+<!-- 下载到本地的配置弹出框 -->
+<dialog id="download_modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">下载到本地</h3>
+        <div>
+            <div class="flex flex-row gap-2">
+                <div class="grow">
+                    <div class="text-sm font-bold text-gray-500 mt-2">图片大小</div>
+                    <input type="number" placeholder="输入图片大小" value="512" class="download-img-size input input-sm input-bordered w-full mt-2" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">取消</button>
+            </form>
+            <button class="btn btn-success download_modal-config">确定</button>
+        </div>
+    </div>
+</dialog>
+
+</body>
+</html>
