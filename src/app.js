@@ -26,7 +26,7 @@ let canvas = null;
 /**
  * @type {CanvasRenderingContext2D}
  */
-let context = null;
+let globalContext = null;
 let width = 0;
 let height = 0;
 let drawOption = {
@@ -46,8 +46,8 @@ function newSpritsDemoCfg() {
                 spritType: "rect",
                 x: 0.5,
                 y: 0.5,
-                size: 0.86,
-                radio: 0.5,
+                size: 0.9,
+                radio: 0.25,
                 type: "g1",
                 bg: "#FFFFFF"
             },
@@ -56,7 +56,7 @@ function newSpritsDemoCfg() {
                 spritType: "img",
                 x: 0.5,
                 y: 0.5,
-                size: 0.5,
+                size: 0.6,
                 img: ""
             }
         ]
@@ -70,8 +70,9 @@ window.onresize = function () {
 
 function initCanvas() {
     canvas = document.createElement("canvas");
+    canvas.addEventListener("click", onCanvasClick);
     canvas.classList.add("w-full");
-    context = canvas.getContext("2d");
+    globalContext = canvas.getContext("2d");
     canvasWrap.append(canvas);
     resizeCanvas();
 }
@@ -81,6 +82,14 @@ function resizeCanvas() {
     canvas.height = canvasWrap.clientHeight * devicePixelRatio;
     width = canvas.width;
     height = canvas.height;
+}
+
+function getSpritBound(sprite, contextWidth, contextHeight) {
+    const w = sprite.size * contextWidth;
+    const h = sprite.size * contextHeight;
+    const x = sprite.x * contextWidth - w / 2;
+    const y = sprite.y * contextHeight - h / 2;
+    return {x: x, y: y, w: w, h: h};
 }
 
 /**
@@ -121,10 +130,7 @@ function drawBG(context, contextWidth, contextHeight, gridCount) {
 }
 
 function drawImg(context, contextWidth, contextHeight, option) {
-    const w = option.size * contextWidth;
-    const h = option.size * contextHeight;
-    const x = option.x * contextWidth - w / 2;
-    const y = option.y * contextHeight - h / 2;
+    let {x, y, w, h} = getSpritBound(option, contextWidth, contextHeight);
 
     // 没有指定图片，那么将svg图标绘制进去
     let imgObj = option.drawImg || {img: new Image(), loaded: false};
@@ -144,6 +150,19 @@ function drawImg(context, contextWidth, contextHeight, option) {
         context.drawImage(imgObj.img, x, y, w, h);
     }
 
+    // 预览模式，如果当前元素是本元素，则绘制选中的边框效果
+    if (globalContext === context && currentSprite !== null && currentSprite === option) {
+        drawSelectedBoder(context, x, y, w, h);
+    }
+
+}
+
+function drawSelectedBoder(context, x, y, w, h) {
+    let strokeColor = context.strokeStyle;
+
+    context.strokeStyle = "blue";
+    context.strokeRect(x, y, w, h);
+    context.strokeStyle = strokeColor;
 }
 
 /**
@@ -169,16 +188,11 @@ function drawRoundedRect(context, contextWidth, contextHeight, option) {
     // 开始绘制路径
     context.beginPath();
 
-    const w = option.size * contextWidth;
-    const h = option.size * contextHeight;
-    const radius = option.radio * (Math.min(w, h)/2);
-
     // 绘制函数的x和y是按照图形的左上角为原点。
     // 这里将传入的中心坐标x和y转换为左上角的。
 
-    const x = option.x * contextWidth - w / 2;
-    const y = option.y * contextHeight - h / 2;
-
+    let {x, y, w, h} = getSpritBound(option, contextWidth, contextHeight);
+    const radius = option.radio * (Math.min(w, h)/2);
 
     // 绘制不同类型的圆角矩形
     switch (option.type) {
@@ -202,6 +216,12 @@ function drawRoundedRect(context, contextWidth, contextHeight, option) {
 
     // 复原原来的填充样式
     context.fillStyle = originalFillStyle;
+
+
+    // 预览模式，如果当前元素是本元素，则绘制选中的边框效果
+    if (globalContext === context && currentSprite !== null && currentSprite === option) {
+        drawSelectedBoder(context, x, y, w, h);
+    }
 }
 
 function drawRoundedRectG1(context,x, y, width, height, radius) {
@@ -244,7 +264,7 @@ function drawIntoContext(context, contextWidth, contextHeight, withGrid = true) 
 }
 
 function draw() {
-    drawIntoContext(context, width, height);
+    drawIntoContext(globalContext, width, height);
 }
 
 function doInputCfg() {
@@ -329,6 +349,33 @@ function addSprite(sprite) {
     onSpriteClick.call(si);
 }
 
+function selectSprite(sprite, event){
+    let d = spriteDoms.find(d => d.extraData === sprite);
+    if (d) {
+        // 当前选中的元素已经是本元素，并且元素类型是图片，那么进行图片文件选择。
+        if (currentSprite === sprite && sprite.spritType === "img") {
+            document.querySelector("#imgfile-selector").click();
+        }
+
+        onSpriteClick.call(d, event);
+        event.stopPropagation();
+    }
+}
+
+function onCanvasClick(event) {
+    let {offsetX, offsetY} = event;
+    // 寻找到本次点击是点击的哪个元素。
+    for (let i = drawOption.sprits.length - 1; i >= 0; i--) {
+        let b = getSpritBound(drawOption.sprits[i], width, height);
+        if (
+            (b.x <= offsetX && offsetX <= b.x + b.w) &&
+            (b.y <= offsetY && offsetY <= b.y + b.h)
+        ) {
+            selectSprite(drawOption.sprits[i], event);
+            return;
+        }
+    }
+}
 function onBtnLoadDefaultSpritClick() {
     let d = newSpritsDemoCfg();
     loadSpriteCfg(d);
@@ -375,6 +422,23 @@ function onCfgFileChange() {
 
     fr.readAsText(f);
 }
+function onSpriteWrapClick() {
+    // 取消元素选中状态
+    currentSprite = null;
+    currentSpriteDom = null;
+    currentSpriteOptionDom = null;
+
+    for (let i = 0; i < spriteDoms.length; i++) {
+        let s = spriteDoms[i];
+        s.querySelector("a").classList.remove("active");
+    }
+
+    spriteOptionEmptyDom.classList.remove("hidden");
+    rectSpriteOptionWrapDom.classList.add("hidden");
+    imgSpriteOptionWrapDom.classList.add("hidden");
+
+    draw();
+}
 
 function onBtnExportClick() {
     if (drawOption.sprits.length <= 0) {
@@ -399,7 +463,7 @@ function onBtnExportClick() {
 
 }
 
-function onSpriteClick() {
+function onSpriteClick(event) {
     currentSpriteDom = this;
     currentSprite = this.extraData;
 
@@ -440,6 +504,12 @@ function onSpriteClick() {
     currentSpriteOptionDom.querySelector(".sprite-size").value = currentSprite.size;
     currentSpriteOptionDom.querySelector(".sprite-size-v").textContent = currentSprite.size;
     currentSpriteOptionDom.classList.remove("hidden");
+
+    draw();
+
+    if (event) {
+        event.stopPropagation();
+    }
 }
 
 function onSpriteNickNameChange() {
@@ -591,6 +661,9 @@ function onBtnDownloadClick() {
     if (drawOption.sprits.length <= 0) {
         return;
     }
+
+    document.querySelector(".download-img-name").value = drawOption.title + ".png";
+
     download_modal.showModal();
 }
 
@@ -602,13 +675,24 @@ function onBtnDownloadConfirmClick() {
         size = 512;
     }
 
+    let nameDom = document.querySelector(".download-img-name");
+    let name = nameDom.value;
+    if (!name) {
+        name = "新图标.png";
+    }
+    if (!name.toLowerCase().endsWith(".png")) {
+        name += ".png";
+    }
+    nameDom.value = name;
+
+
     let canvs = document.createElement("canvas");
     canvs.width = size;
     canvs.height = size;
     let ctx = canvs.getContext("2d");
     drawIntoContext(ctx, size, size, false);
     canvs.toBlob(function (v) {
-        doDownload(v, drawOption.title + ".png");
+        doDownload(v, name);
     }, "image/png", 1);
 
 
@@ -650,6 +734,8 @@ function newSpriteItemDom(sprite) {
 window.onload = function () {
     initCanvas();
     draw();
+
+    spriteWrapDom.addEventListener("click", onSpriteWrapClick);
 
     document.querySelector("#loadDefaultSprite").addEventListener("click", onBtnLoadDefaultSpritClick);
     document.querySelector("#importBtn").addEventListener("click", onBtnImportClick);
