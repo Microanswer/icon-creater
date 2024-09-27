@@ -70,14 +70,15 @@ window.onresize = function () {
 
 function initCanvas() {
     canvas = document.createElement("canvas");
+    canvas.classList.add("w-full");
     context = canvas.getContext("2d");
     canvasWrap.append(canvas);
     resizeCanvas();
 }
 
 function resizeCanvas() {
-    canvas.width = canvasWrap.clientWidth;
-    canvas.height = canvasWrap.clientHeight;
+    canvas.width = canvasWrap.clientWidth * devicePixelRatio;
+    canvas.height = canvasWrap.clientHeight * devicePixelRatio;
     width = canvas.width;
     height = canvas.height;
 }
