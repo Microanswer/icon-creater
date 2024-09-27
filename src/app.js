@@ -271,6 +271,24 @@ function doInputCfg() {
     CfgFileSelectorDom.click();
 }
 
+function clearSelect() {
+    // 取消元素选中状态
+    currentSprite = null;
+    currentSpriteDom = null;
+    currentSpriteOptionDom = null;
+
+    for (let i = 0; i < spriteDoms.length; i++) {
+        let s = spriteDoms[i];
+        s.querySelector("a").classList.remove("active");
+    }
+
+    spriteOptionEmptyDom.classList.remove("hidden");
+    rectSpriteOptionWrapDom.classList.add("hidden");
+    imgSpriteOptionWrapDom.classList.add("hidden");
+
+    draw();
+}
+
 function showAlert(msg, title="提示信息") {
     acModalTitleDom.textContent = title;
     acModalMsgDom.textContent = msg;
@@ -364,6 +382,8 @@ function selectSprite(sprite, event){
 
 function onCanvasClick(event) {
     let {offsetX, offsetY} = event;
+    offsetX *= devicePixelRatio;
+    offsetY *= devicePixelRatio;
     // 寻找到本次点击是点击的哪个元素。
     for (let i = drawOption.sprits.length - 1; i >= 0; i--) {
         let b = getSpritBound(drawOption.sprits[i], width, height);
@@ -375,6 +395,8 @@ function onCanvasClick(event) {
             return;
         }
     }
+
+    clearSelect();
 }
 function onBtnLoadDefaultSpritClick() {
     let d = newSpritsDemoCfg();
@@ -424,20 +446,7 @@ function onCfgFileChange() {
 }
 function onSpriteWrapClick() {
     // 取消元素选中状态
-    currentSprite = null;
-    currentSpriteDom = null;
-    currentSpriteOptionDom = null;
-
-    for (let i = 0; i < spriteDoms.length; i++) {
-        let s = spriteDoms[i];
-        s.querySelector("a").classList.remove("active");
-    }
-
-    spriteOptionEmptyDom.classList.remove("hidden");
-    rectSpriteOptionWrapDom.classList.add("hidden");
-    imgSpriteOptionWrapDom.classList.add("hidden");
-
-    draw();
+    clearSelect();
 }
 
 function onBtnExportClick() {
