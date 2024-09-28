@@ -49,6 +49,10 @@ function newSpritsDemoCfg() {
                 size: 0.9,
                 radio: 0.25,
                 type: "g1",
+                shadowX: 0,
+                shadowY: 0,
+                shadowColor: "#000000",
+                shadowBlur: 0,
                 bg: "#FFFFFF"
             },
             {
@@ -57,7 +61,11 @@ function newSpritsDemoCfg() {
                 x: 0.5,
                 y: 0.5,
                 size: 0.6,
-                img: ""
+                img: "",
+                shadowX: 0,
+                shadowY: 0,
+                shadowColor: "#000000",
+                shadowBlur: 10,
             }
         ]
     }
@@ -92,13 +100,28 @@ function getSpritBound(sprite, contextWidth, contextHeight) {
     return {x: x, y: y, w: w, h: h};
 }
 
+function applyShadow(context, offsetX, offsetY, color, blur) {
+    context.shadowColor = color;
+    context.shadowOffsetX = offsetX;
+    context.shadowOffsetY = offsetY;
+    context.shadowBlur = blur;
+}
+
+function clearShadow(context) {
+    context.shadowColor = "transparent";
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+    context.shadowBlur = 0;
+}
+
 /**
  *
  * @param gridCount {number}
  */
 function drawBG(context, contextWidth, contextHeight, gridCount) {
     const oriBG = context.fillStyle;
-    context.fillStyle = "#f1f1f1";
+    clearShadow(context);
+    context.fillStyle = "#f2f2f2";
     context.fillRect(0, 0, contextWidth, contextHeight);
     context.fillStyle = oriBG;
 
@@ -138,7 +161,9 @@ function drawImg(context, contextWidth, contextHeight, option) {
     if (!imgObj.loaded) {
         imgObj.img.onload = function () {
             imgObj.loaded = true;
+            applyShadow(context, (option.shadowX || 0) * w, (option.shadowY || 0) * h, option.shadowColor, option.shadowBlur);
             context.drawImage(imgObj.img, x, y, w, h);
+            clearShadow(context);
         }
 
         if (!option.img) {
@@ -147,7 +172,9 @@ function drawImg(context, contextWidth, contextHeight, option) {
             imgObj.img.src = option.img;
         }
     } else {
+        applyShadow(context, (option.shadowX || 0) * w, (option.shadowY || 0) * h, option.shadowColor, option.shadowBlur);
         context.drawImage(imgObj.img, x, y, w, h);
+        clearShadow(context);
     }
 
     // 预览模式，如果当前元素是本元素，则绘制选中的边框效果
@@ -192,6 +219,9 @@ function drawRoundedRect(context, contextWidth, contextHeight, option) {
     // 这里将传入的中心坐标x和y转换为左上角的。
 
     let {x, y, w, h} = getSpritBound(option, contextWidth, contextHeight);
+
+    applyShadow(context, (option.shadowX || 0) * w, (option.shadowY || 0) * h, option.shadowColor, option.shadowBlur);
+
     const radius = option.radio * (Math.min(w, h)/2);
 
     // 绘制不同类型的圆角矩形
@@ -213,11 +243,10 @@ function drawRoundedRect(context, contextWidth, contextHeight, option) {
     // 封闭路径并进行填充
     context.closePath();
     context.fill();
+    clearShadow(context);
 
     // 复原原来的填充样式
     context.fillStyle = originalFillStyle;
-
-
     // 预览模式，如果当前元素是本元素，则绘制选中的边框效果
     if (globalContext === context && currentSprite !== null && currentSprite === option) {
         drawSelectedBoder(context, x, y, w, h);
@@ -512,6 +541,14 @@ function onSpriteClick(event) {
     currentSpriteOptionDom.querySelector(".sprite-y-v").textContent = currentSprite.y;
     currentSpriteOptionDom.querySelector(".sprite-size").value = currentSprite.size;
     currentSpriteOptionDom.querySelector(".sprite-size-v").textContent = currentSprite.size;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-x").value = currentSprite.shadowX;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-x-v").textContent = currentSprite.shadowX;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-y").value = currentSprite.shadowY;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-y-v").textContent = currentSprite.shadowY;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-color").value = currentSprite.shadowColor;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-color-v").textContent = currentSprite.shadowColor;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-blur").value = currentSprite.shadowBlur;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-blur-v").textContent = currentSprite.shadowBlur;
     currentSpriteOptionDom.classList.remove("hidden");
 
     draw();
@@ -568,6 +605,26 @@ function onSpriteRadioChange() {
 function onSpriteColorChange() {
     currentSprite.bg = this.value;
     rectSpriteOptionWrapDom.querySelector(".sprite-color-v").textContent = currentSprite.bg;
+    draw();
+}
+function onSpriteShadowXChange() {
+    currentSprite.shadowX = numberRound(parseFloat(this.value), 2);
+    currentSpriteOptionDom.querySelector(".sprite-shadow-x-v").textContent = String(currentSprite.shadowX);
+    draw();
+}
+function onSpriteShadowYChange() {
+    currentSprite.shadowY = numberRound(parseFloat(this.value), 2);
+    currentSpriteOptionDom.querySelector(".sprite-shadow-y-v").textContent = String(currentSprite.shadowY);
+    draw();
+}
+function onSpriteShadowBlurChange() {
+    currentSprite.shadowBlur = this.value;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-blur-v").textContent = this.value;
+    draw();
+}
+function onSpriteShadowColorChange() {
+    currentSprite.shadowColor = this.value;
+    currentSpriteOptionDom.querySelector(".sprite-shadow-color-v").textContent = this.value;
     draw();
 }
 function onSpriteFileChange() {
@@ -632,6 +689,10 @@ function onMenuItemRectClick() {
         size: numberRound(Math.random(), 2),
         radio: numberRound(Math.random(), 2),
         type: "g1",
+        shadowX: 0,
+        shadowY: 0,
+        shadowColor: "#000000",
+        shadowBlur: 0,
         bg: randomColor()
     });
 
@@ -645,7 +706,11 @@ function onMenuItemImgClick() {
         img: "", // 图片的base64
         x: 0.5,
         y: 0.5,
-        size: 0.3
+        size: 0.3,
+        shadowX: 0,
+        shadowY: 0,
+        shadowColor: "#000000",
+        shadowBlur: 0,
     });
 
     draw();
@@ -763,6 +828,11 @@ window.onload = function () {
     rectSpriteOptionWrapDom.querySelector(".sprite-size").addEventListener("input", onSpriteSizeChange);
     rectSpriteOptionWrapDom.querySelector(".sprite-radio").addEventListener("input", onSpriteRadioChange);
     rectSpriteOptionWrapDom.querySelector(".sprite-color").addEventListener("input", onSpriteColorChange);
+    rectSpriteOptionWrapDom.querySelector(".sprite-shadow-x").addEventListener("input", onSpriteShadowXChange);
+    rectSpriteOptionWrapDom.querySelector(".sprite-shadow-y").addEventListener("input", onSpriteShadowYChange);
+    rectSpriteOptionWrapDom.querySelector(".sprite-shadow-blur").addEventListener("input", onSpriteShadowBlurChange);
+    rectSpriteOptionWrapDom.querySelector(".sprite-shadow-color").addEventListener("input", onSpriteShadowColorChange);
+
     rectSpriteOptionWrapDom.querySelector(".sprite-del").addEventListener("click", onSpriteDelClick);
 
     imgSpriteOptionWrapDom.querySelector(".sprite-nickname").addEventListener("input", onSpriteNickNameChange);
@@ -772,4 +842,8 @@ window.onload = function () {
     imgSpriteOptionWrapDom.querySelector(".sprite-size").addEventListener("input", onSpriteSizeChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-img").addEventListener("change", onSpriteFileChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-del").addEventListener("click", onSpriteDelClick);
+    imgSpriteOptionWrapDom.querySelector(".sprite-shadow-x").addEventListener("input", onSpriteShadowXChange);
+    imgSpriteOptionWrapDom.querySelector(".sprite-shadow-y").addEventListener("input", onSpriteShadowYChange);
+    imgSpriteOptionWrapDom.querySelector(".sprite-shadow-blur").addEventListener("input", onSpriteShadowBlurChange);
+    imgSpriteOptionWrapDom.querySelector(".sprite-shadow-color").addEventListener("input", onSpriteShadowColorChange);
 }

@@ -71,10 +71,13 @@
 
                         <div class="w-full h-full p-2 hidden" id="rectSpriteOptionWrap">
 
+                            <!-- 别名 -->
                             <div class="text-sm bg-base-200 rounded-lg p-2 flex flex-row gap-1 items-center">
                                 <label class="text-gray-500 font-bold">别名</label>
                                 <input type="text" class="sprite-nickname input input-xs grow rounded-md" />
                             </div>
+
+                            <!-- 坐标 -->
                             <div class="flex flex-row gap-2 mt-2">
                                 <div class="text-sm bg-base-200 rounded-lg p-2 grow">
                                     <div>
@@ -91,6 +94,8 @@
                                     <input type="range" min="0" max="1" step="0.01" class="sprite-y range range-xs mt-2" />
                                 </div>
                             </div>
+
+                            <!-- 大小 -->
                             <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
                                 <div>
                                     <label class="text-gray-500 font-bold">大小</label>
@@ -98,6 +103,8 @@
                                 </div>
                                 <input type="range" min="0" max="1" step="0.01" class="sprite-size range range-xs mt-2" />
                             </div>
+
+                            <!-- 圆角 -->
                             <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
                                 <div>
                                     <label class="text-gray-500 font-bold">圆角</label>
@@ -105,6 +112,8 @@
                                 </div>
                                 <input type="range" min="0" max="1" step="0.01" class="sprite-radio range range-xs mt-2" />
                             </div>
+
+                            <!-- 颜色 -->
                             <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
                                 <div>
                                     <label class="text-gray-500 font-bold">颜色</label>
@@ -112,6 +121,43 @@
                                 </div>
                                 <input type="color" class="sprite-color block mt-1" />
                             </div>
+
+                            <!-- 阴影坐标 -->
+                            <div class="flex flex-row gap-2 mt-2">
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">阴影X</label>
+                                        <span class="sprite-shadow-x-v float-end">0.1</span>
+                                    </div>
+                                    <input type="range" min="-0.2" max="0.2" step="0.001" class="sprite-shadow-x range range-xs mt-2" />
+                                </div>
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">阴影Y</label>
+                                        <span class="sprite-shadow-y-v float-end">0.1</span>
+                                    </div>
+                                    <input type="range" min="-0.2" max="0.2" step="0.001" class="sprite-shadow-y range range-xs mt-2" />
+                                </div>
+                            </div>
+
+                            <!-- 阴影模糊度 -->
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">阴影模糊度</label>
+                                    <span class="sprite-shadow-blur-v float-end">10</span>
+                                </div>
+                                <input type="range" min="0" max="100" step="0.1" class="sprite-shadow-blur range range-xs mt-2" />
+                            </div>
+
+                            <!-- 阴影颜色 -->
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">阴影颜色</label>
+                                    <span class="sprite-shadow-color-v float-end">#d9d9d9</span>
+                                </div>
+                                <input type="color" class="sprite-shadow-color mt-2" />
+                            </div>
+
                             <button class="sprite-del btn text-error btn-sm btn-block my-2">删除</button>
                         </div>
                         <div class="w-full h-full p-2 hidden" id="imgSpriteOptionWrap">
@@ -153,6 +199,44 @@
                                     未选择文件
                                 </label>
                             </div>
+
+
+                            <!-- 阴影坐标 -->
+                            <div class="flex flex-row gap-2 mt-2">
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">阴影X</label>
+                                        <span class="sprite-shadow-x-v float-end">0.1</span>
+                                    </div>
+                                    <input type="range" min="-0.2" max="0.2" step="0.001" class="sprite-shadow-x range range-xs mt-2" />
+                                </div>
+                                <div class="text-sm bg-base-200 rounded-lg p-2 grow">
+                                    <div>
+                                        <label class="text-gray-500 font-bold">阴影Y</label>
+                                        <span class="sprite-shadow-y-v float-end">0.1</span>
+                                    </div>
+                                    <input type="range" min="-0.2" max="0.2" step="0.001" class="sprite-shadow-y range range-xs mt-2" />
+                                </div>
+                            </div>
+
+                            <!-- 阴影模糊度 -->
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">阴影模糊度</label>
+                                    <span class="sprite-shadow-blur-v float-end">10</span>
+                                </div>
+                                <input type="range" min="0" max="100" step="0.1" class="sprite-shadow-blur range range-xs mt-2" />
+                            </div>
+
+                            <!-- 阴影颜色 -->
+                            <div class="text-sm bg-base-200 rounded-lg p-2 mt-2">
+                                <div>
+                                    <label class="text-gray-500 font-bold">阴影颜色</label>
+                                    <span class="sprite-shadow-color-v float-end">#d9d9d9</span>
+                                </div>
+                                <input type="color" class="sprite-shadow-color mt-2" />
+                            </div>
+
                             <button class="sprite-del btn text-error btn-sm btn-block my-2">删除</button>
                         </div>
 
