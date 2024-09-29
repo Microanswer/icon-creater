@@ -1,6 +1,6 @@
 {
   "name": "icon-creater",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "With this tool, you can conveniently and quickly create an icon for your application. Please note that the created icon is not suitable for label text embellishment.",
   "main": "index.js",
   "scripts": {
