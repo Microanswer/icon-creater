@@ -51,8 +51,8 @@ function newSpritsDemoCfg() {
                 type: "g1",
                 shadowX: 0,
                 shadowY: 0,
-                shadowColor: "#000000",
-                shadowBlur: 0,
+                shadowColor: "#6e6e6e",
+                shadowBlur: 18,
                 bg: "#FFFFFF"
             },
             {
@@ -65,7 +65,7 @@ function newSpritsDemoCfg() {
                 shadowX: 0,
                 shadowY: 0,
                 shadowColor: "#000000",
-                shadowBlur: 10,
+                shadowBlur: 0,
             }
         ]
     }
@@ -317,7 +317,23 @@ function clearSelect() {
 
     draw();
 }
+function checkbrowser() {
+    var ua = navigator.userAgent.toLowerCase();
+    var badBrowserCheckers = [
+        () => ua.indexOf('micromessenger') != -1,
+        () => ua.indexOf('alipay') != -1,
+    ];
 
+    for (let i = 0; i < badBrowserCheckers.length; i++) {
+        let isBad = badBrowserCheckers[i]();
+        if (isBad) {
+            document.querySelector(".changebrowserTip").classList.remove('hidden');
+            return false;
+        }
+    }
+
+    return true;
+}
 function showAlert(msg, title="提示信息") {
     acModalTitleDom.textContent = title;
     acModalMsgDom.textContent = msg;
@@ -808,6 +824,7 @@ function newSpriteItemDom(sprite) {
 window.onload = function () {
     initCanvas();
     draw();
+    checkbrowser();
 
     spriteWrapDom.addEventListener("click", onSpriteWrapClick);
 
@@ -832,7 +849,6 @@ window.onload = function () {
     rectSpriteOptionWrapDom.querySelector(".sprite-shadow-y").addEventListener("input", onSpriteShadowYChange);
     rectSpriteOptionWrapDom.querySelector(".sprite-shadow-blur").addEventListener("input", onSpriteShadowBlurChange);
     rectSpriteOptionWrapDom.querySelector(".sprite-shadow-color").addEventListener("input", onSpriteShadowColorChange);
-
     rectSpriteOptionWrapDom.querySelector(".sprite-del").addEventListener("click", onSpriteDelClick);
 
     imgSpriteOptionWrapDom.querySelector(".sprite-nickname").addEventListener("input", onSpriteNickNameChange);
@@ -841,9 +857,9 @@ window.onload = function () {
     imgSpriteOptionWrapDom.querySelector(".sprite-y").addEventListener("input", onSpriteYChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-size").addEventListener("input", onSpriteSizeChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-img").addEventListener("change", onSpriteFileChange);
-    imgSpriteOptionWrapDom.querySelector(".sprite-del").addEventListener("click", onSpriteDelClick);
     imgSpriteOptionWrapDom.querySelector(".sprite-shadow-x").addEventListener("input", onSpriteShadowXChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-shadow-y").addEventListener("input", onSpriteShadowYChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-shadow-blur").addEventListener("input", onSpriteShadowBlurChange);
     imgSpriteOptionWrapDom.querySelector(".sprite-shadow-color").addEventListener("input", onSpriteShadowColorChange);
+    imgSpriteOptionWrapDom.querySelector(".sprite-del").addEventListener("click", onSpriteDelClick);
 }
